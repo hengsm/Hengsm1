@@ -1,16 +1,30 @@
+FROM php:8.1
 
-FROM php:8.2-fpm
+# Sistem güncelleme ve gerekli kütüphaneler
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    zip \
+    unzip \
+    libzip-dev \
+    && docker-php-ext-install zip pdo pdo_mysql
 
-RUN apt-get update && apt-get install -y     build-essential     libpng-dev     libjpeg-dev     libfreetype6-dev     locales     zip     jpegoptim optipng pngquant gifsicle     vim     unzip     git     curl     libonig-dev     libxml2-dev     libzip-dev     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Composer yükleme
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Proje dosyalarını kopyala
+COPY . /var/www
 
 WORKDIR /var/www
 
-COPY . .
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
+# Composer ile bağımlılıkları yükle
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-RUN php artisan key:generate || true
+# Laravel için key oluştur
+RUN php artisan key:generate
 
-CMD ["php-fpm"]
+# Port (Render için gerekli)
+EXPOSE 8000
+
+# Laravel server başlat
+CMD php artisan serve --host=0.0.0.0 --port=8000
