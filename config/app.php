@@ -1,0 +1,1 @@
+// örnek içerik: config/app.php

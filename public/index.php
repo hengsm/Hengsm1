@@ -1,0 +1,1 @@
+// örnek içerik: public/index.php

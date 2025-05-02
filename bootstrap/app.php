@@ -1,0 +1,1 @@
+// örnek içerik: bootstrap/app.php

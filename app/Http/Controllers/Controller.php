@@ -1,0 +1,1 @@
+// örnek içerik: app/Http/Controllers/Controller.php

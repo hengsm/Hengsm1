@@ -1,0 +1,1 @@
+// örnek içerik: routes/web.php
